@@ -56,7 +56,7 @@ const PanelInfos:React.FC = () =>{
                 <hr className="solid"/>
                 <div className="container">
                     <div className="container_avg_age">      
-                        <label>Min age avg </label>
+                        <label>Max age avg </label>
                         <section className="ageMax">
                             {maxAge.map(avg=>(
                                     <Link key={avg.id_team} to={`/teamForm/${avg.id_team}`} >

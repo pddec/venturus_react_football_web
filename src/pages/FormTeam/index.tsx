@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useEffect, useRef, useState } from 'react';
 import {FiTrash2} from "react-icons/fi";
-import {useRouteMatch} from 'react-router-dom';
+import {useRouteMatch,useHistory} from 'react-router-dom';
+import {uuid} from 'uuidv4';
 
 import{MainFormPanel,TeamForm} from './styles';
 import TeamTags from '../../components/TeamTags';
@@ -8,6 +9,7 @@ import PlayerSelector from '../../components/PlayerSelector';
 import api from './../../services/api'
 
 interface FormValues{
+    id:string;
     tags:string[];
     players:Players[];
     teamName:string;
@@ -40,6 +42,7 @@ interface RouteParams{
 const FormTeam:React.FC = () =>{
 
     const{params} = useRouteMatch<RouteParams>();
+    
 
     const formations = [    
         '3 - 2 - 2 - 3',
@@ -54,6 +57,7 @@ const FormTeam:React.FC = () =>{
         '5 - 4 -1']
 
     const clearForm:FormValues = {
+        id:"",
         tags:[],
         players:[],
         teamName:"",
@@ -66,7 +70,7 @@ const FormTeam:React.FC = () =>{
     const [values,setValues] = useState<FormValues>(clearForm);
     const[players,setPlayers] = useState<Players[]>([]);
 
-    const formTeam = useRef<HTMLFormElement>(null);
+    const urlHist = useHistory();
 
     useEffect(()=>{
         if(!params.id) return;
@@ -135,6 +139,12 @@ const FormTeam:React.FC = () =>{
         setValues(Object.assign({...values},{tags}));
     }
 
+    function handleId(){
+        if(values.id) return values;
+        const id = uuid();
+        return Object.assign({...values},{id})
+    }
+
     function handleAddPlayers(players:Players){
         const newPlayers = [...values.players,players];
         if(!(newPlayers.length <= 11)) return;
@@ -182,20 +192,35 @@ const FormTeam:React.FC = () =>{
 
     function handleFormSubmit(event:React.FormEvent<HTMLFormElement>):void{
         event.preventDefault();
+
+        const valuesWithId = handleId();
         const storage = localStorage.getItem("football_web:form");
         
         if(!storage){
-            localStorage.setItem("football_web:form",JSON.stringify([values]));
+            localStorage.setItem("football_web:form",JSON.stringify([valuesWithId]));
             setValues(clearForm);
             setPlayers([]);
+            urlHist.push('/');
             return;
         }
 
-        const storegeValues = JSON.parse(storage);
+        const storageValues = JSON.parse(storage) as FormValues[];
 
-        localStorage.setItem("football_web:form",JSON.stringify([...storegeValues,values]));
+        const findIndex = storageValues.findIndex(value => value.id === valuesWithId.id);
+
+        if(findIndex !== -1){
+            storageValues[findIndex] = valuesWithId;
+            localStorage.setItem("football_web:form",JSON.stringify(storageValues));
+            setValues(clearForm);
+            setPlayers([]);
+            urlHist.push('/');
+            return;
+        }
+
+        localStorage.setItem("football_web:form",JSON.stringify([...storageValues,valuesWithId]));
         setValues(clearForm);
         setPlayers([]);
+        urlHist.push('/');
     }
     
     return <MainFormPanel>
@@ -204,7 +229,6 @@ const FormTeam:React.FC = () =>{
         </section>
         <hr className="solid"/>
         <TeamForm 
-            ref={formTeam}
             onSubmit={handleFormSubmit}
             onKeyDown={handleFormSubmitByEnter}
         >
