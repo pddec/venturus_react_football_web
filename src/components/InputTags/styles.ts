@@ -1,18 +1,28 @@
 import styled from 'styled-components';
 
+export const Container=styled.section`
+  display: flex;
+  flex-direction:column ;
+  flex-wrap: wrap;
+   
+   .input_area>.label_tag{
+
+     &:focus,label {
+        border: 2px solid #e80936;
+      }
+    } 
+`
+
 export const InputTag = styled.div`
   padding:55px;
   background: white;
   border: 1px solid #737373;
   border-radius: 5px 5px;
-  display: flex;
-  flex-wrap: wrap;
   padding: 5px 5px 0;
 
 input.input-tag {
   border: none;
   width: 100%;
-  
 }
 
 .input-tag__tags {

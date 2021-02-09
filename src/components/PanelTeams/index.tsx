@@ -21,7 +21,7 @@ const PanelTeam:React.FC = () =>{
         }
     },[]);
 
-    function handleRemoveTeam(index:number){
+    const handleRemoveTeam = function handleRemoveTeam(index:number){
         const tmpTeams = [ ...teams ];
         tmpTeams.splice(index, 1);
         setTeams(tmpTeams);
@@ -64,7 +64,6 @@ const PanelTeam:React.FC = () =>{
                                         <div>
                                             <p>{team.description}</p>
                                             <div>
-                                                
                                                 <a
                                                     onClick={e=>{
                                                         e.preventDefault();
