@@ -1,29 +1,24 @@
 import React from 'react';
 
-import{InputField} from './styles';
+import{InputField,RadioField} from './styles';
 
-interface Props{
-    name?:string,
-    value?:string,
-    id?:string,
-    label?:string,
-    placeHolder?:string,
-    onChange?(elem:string):void
+interface Props<T> extends React.HTMLProps<T>{
+    onChange?(event:React.ChangeEvent<T>):void
 }
 
-interface Select extends Props{
+interface Radio extends Props<HTMLInputElement>{
     options:Array<string>;
 }
 
-export const Text = React.forwardRef<HTMLTextAreaElement,Props>(({name,value,id,label,onChange}:Props,ref) => {
+export const Text = React.forwardRef<HTMLTextAreaElement,Props<HTMLTextAreaElement>>(({name,value,id,label,onChange}:Props<HTMLTextAreaElement>,ref) => {
     return <InputField>
         <textarea
-            name={name}
+            data-input-name={name}
             ref={ref}
             className="input_area  text_box"
             id={id}
-            value={value?value:""}
-            onChange={({currentTarget})=>onChange?onChange(currentTarget.value):null}/>
+            value={value}
+            onChange={(event)=>onChange?onChange(event):null}/>
 
         <label htmlFor="input_area" 
                 className={id}>
@@ -32,40 +27,43 @@ export const Text = React.forwardRef<HTMLTextAreaElement,Props>(({name,value,id,
     </InputField>
 });
 
-export const Input = React.forwardRef<HTMLInputElement,Props>(({name,placeHolder,id,label,value,onChange}:Props,ref) => {
+export const Input = React.forwardRef<HTMLInputElement,Props<HTMLInputElement>>(({name,placeholder,id,label,value,onChange}:Props<HTMLInputElement>,ref) => {
     return <InputField>
         <input
-            name={name}
+            data-input-name={name}
             className="input_area"
             id={id}
             ref={ref}
-            value={value?value:""}
-            onChange={({currentTarget})=>onChange?onChange(currentTarget.value):null}
-            placeholder={placeHolder?placeHolder:""}/>
+            onChange={(event)=>onChange?onChange(event):null}
+            placeholder={placeholder}/>
     
         <label htmlFor={id} className="labels">{label?label:""}</label>
         
     </InputField>
 });
 
-export const RadioInput = React.forwardRef<HTMLInputElement,Select>(({name,label,options,id,onChange}:Select,ref) => {
+export const RadioInput = React.forwardRef<HTMLInputElement,Radio>(({name,label,options,id,onChange}:Radio,ref) => {
     return <InputField>
-        <section id={id}>
-            {options.map((option,index)=>(
-                <>
-                    <input 
-                        type="radio"
-                        ref={ref}
-                        id={`${option}-${index}`}
-                        name={name} 
-                        value={option.toLowerCase()}/>
-                    <label 
-                        htmlFor={`${option}-${index}`}>
-                            {option.toUpperCase()}
-                    </label>
-                </>))}
-            </section>
-            <label className="labels">{label}</label>
+        
+        {options.map((option,index)=>(
+        <RadioField key={`${name}-${index}`}>
+            <input
+                className="exemplo2"
+                type="radio"
+                ref={ref}
+                id={`${option}-${index}`}
+                data-radio-name={name}
+                name={name}
+                value={option.toLowerCase()}
+                onChange={(event)=>onChange?onChange(event):null}
+            />
+            <label
+                className="exemplo2"
+                htmlFor={`${option}-${index}`}>
+                    {option.toUpperCase()}
+            </label>
+        </RadioField>))}
+        <label className="labels">{label}</label>
         
     </InputField>
 });

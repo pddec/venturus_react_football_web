@@ -1,44 +1,66 @@
-import React, { useRef } from 'react';
+import React, { Children } from 'react';
+import { stringify } from 'uuid';
 
 import{FormBody} from './styles';
 
+interface Subscriber{
+  callback:Array<Function>;
+  value?:Array<string>|number|string|boolean;
+}
+interface ValuesForm{
+  value:Array<string>|number|string|boolean;
+}
+
+interface Props extends React.HTMLProps<HTMLFormElement>{
+  onSubmit?(event: React.FormEvent<HTMLFormElement>):void;
+  onSubmit?(values:ValuesForm):void;
+}
+
 interface ValuesInputs{
-    [key:string]:Array<Function>;
+    [key:string]:Subscriber;
 }
 
 var subscribers:ValuesInputs={};
 
-export const publish = function publish(event:string, data:string) {
-    if (!subscribers[event]) return;
+export const publish = function publish(event:string, data:string|Array<string>|number) {
+      if (!subscribers[event]) return;
+      var subscriber = subscribers[event];
+      subscriber.callback.forEach(callback=> callback.call(subscriber,data));
+      console.log(subscribers);
+};
 
-    subscribers[event].forEach(subscriberCallback => subscriberCallback(data));
-  }
 
+function subscribe(event:string|null, callback:Function) {
+ 
+    if(!event) return;
 
-function subscribe(event:string, ref:HTMLElement) {
-    var index:number;
+    if (!subscribers[event]) subscribers[event] = {callback:[]};
     
-    if(ref) 
-
-    if (!subscribers[event]) subscribers[event] = [];
+    subscribers[event].callback.push(callback);
     
-    index = subscribers[event].push() - 1;
-
     return {
       unsubscribe() {
-        subscribers[event].splice(index, 1);
+       delete subscribers[event];
       }
     };
   }
 
-export const DynamicForm:React.FC = function DynamicForm({children}) {
+export const DynamicForm =  React.forwardRef<HTMLFormElement,Props>(({children,name,onSubmit}:Props,ref) => {
 
-    const form_ref = useRef<HTMLFormElement>(null);
+  const {current} = ref as React.MutableRefObject<HTMLFormElement>
 
-    return (<FormBody>
-                <form ref={form_ref}>
+  function eachElements(data_atribute_name:string) {
+    if(!current) return ()=>{console.warn("Any calls")}
+    return function getElements(callBack:Function){
+      current.querySelectorAll(`*[data-${data_atribute_name}]^="${name}"`)
+      .forEach(elem=>callBack(elem));
+    }
+  }
+
+  return (<FormBody>
+                <form ref={ref} >
                     {children}
                 </form>
             </FormBody>)
 
-}
+});

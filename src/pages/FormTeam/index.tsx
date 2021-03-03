@@ -31,25 +31,28 @@ interface RouteParams{
 
 const FormTeam:React.FC = () =>{
 
+    const form_ref = useRef<HTMLFormElement>(null);
+
     return <MainFormPanel>
         <section id="title">
             <p>Create Your Team </p>
         </section>
         <hr className="solid"/>
-        <DynamicForm>
+        <DynamicForm ref={form_ref} name="team" >
             <div className="vertical_container">
                 <div className="horizontal_container space wrap">
                     <div className="vertical_container max_container space">
-                        <Input label="Team Name" value="" onChange={()=>{}}/>
-                        <Text  label="Description" value="" onChange={()=>{}}/>
+                        <Input name="team_name" label="Team Name" onChange={({currentTarget})=>{publish("team_name",currentTarget.value)}}/>
+                        <Text  name="team_description" label="Description" onChange={(elem)=>{}}/>
                     </div>
                     <div className="vertical_container max_container space">
-                        <Input placeHolder="https://myteam.com" label="Team Name" value="" onChange={()=>{}}/>
+                        <Input name="team_site" placeholder="https://myteam.com" label="Team Name" onChange={()=>{}}/>
                         <RadioInput name="team_type" label="Team Type" options={["real","fantasy"]}/>
-                        <InputTags id="tags_team"  label="Tags" />
+                        <section data-comp="team_tags">
+                            <InputTags id="tags_team" label="Tags" onChange={values => console.log(values)}/>
+                        </section>
+                    </div>
                 </div>
-            </div>
-               
             </div>
         </DynamicForm>
     </MainFormPanel>

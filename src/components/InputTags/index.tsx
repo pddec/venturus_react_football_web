@@ -1,67 +1,73 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 
-import {InputTag,Container} from './styles'
+import {InputTag,ContainerTag,InputLI} from './styles'
 
-interface Props{
+interface Props {
   id?:string;
   label:string;
   values?:string[];
+  name?:string;
+  onChange?(values:Array<string>):void
 }
 
-const InputTags= React.forwardRef<HTMLSpanElement,Props>(({label,id,values}:Props,ref) => {
+
+const InputTags:React.FC<Props>= function InputTags ({label,id,values,name,onChange}:Props) {
   
   var [tags,setTags] = useState<Array<string>>([]);
-
-  if(values) setTags(Array.from(values));
   
+  if(values) setTags(Array.from(values));
+
   function onKeyDown(elem:HTMLInputElement,key:string) {
-    if(["Backspace","Delete"].includes(key)){
+    var tag_tmp = Array.from(tags);
+    var value:string = elem.value;
+    
+    if(["Backspace","Delete"].includes(key) 
+        && (value === "")){
       onRemove(tags.length-1);
       return;
     }
+
     if(key !== "Enter") return;
-    let tag_tmp = Array.from(tags);
+    if(key ==="Enter" && value ==="") return;
+
     tag_tmp.push(elem.value);
     elem.value=""
     setTags(tag_tmp);
+    if(onChange) onChange(tag_tmp);
   }
 
   function onRemove(i:number) {
     let tag_tmp = Array.from(tags);
     tag_tmp.splice(i,1);
-    console.log(tags);
     setTags(tag_tmp);
+    if(onChange) onChange(tag_tmp);
   }
 
     return (
-      <Container>
-          <span className="input_area">
-            <label className="label_tag" htmlFor={id}>{label?label:""}</label>
-          </span>
+        <ContainerTag>
           <InputTag>
-            <ul className="input-tag__tags">
-              { tags.map((tag, i) => (
-                <li key={i}>
-                  <span ref={ref}>
-                    {tag}
-                    <button 
-                      type="button" 
-                      onClick={() => {onRemove(i)}}>+</button>
-                  </span>
-                </li>
-              ))}
-              <li className="input-tag__tags__input input_area">
-                <input
-                  id={id}
-                  className="input-tag label_tag" 
-                  type="text" 
-                  onKeyDown={({key,currentTarget}) => onKeyDown(currentTarget,key)}/>
-              </li>
-            </ul>
+                { tags.map((tag, i) => (
+                  <li  className="label_tag" key={i}>
+                    <span data-name={name}>
+                      {tag}
+                      <button
+                        type="button" 
+                        onClick={() => {onRemove(i)}}>+</button>
+                    </span>
+                  </li>
+                ))}
+                <InputLI label={label} >
+                  <input
+                      id={id}
+                      className="input_tag"
+                      type="text"
+                      onKeyDown={({key,currentTarget}) => onKeyDown(currentTarget,key)}/>
+                      <div className="input_tag_focus"></div>
+                </InputLI>
           </InputTag>
-      </Container>
+      </ContainerTag> 
     );
-  });
+  };
 
   export default InputTags;
   
