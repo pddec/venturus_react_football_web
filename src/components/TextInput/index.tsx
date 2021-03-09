@@ -1,6 +1,6 @@
 import React from 'react';
 
-import{InputField,RadioField} from './styles';
+import{InputField} from './styles';
 
 interface Props<T> extends React.HTMLProps<T>{
     onChange?(event:React.ChangeEvent<T>):void
@@ -38,32 +38,6 @@ export const Input = React.forwardRef<HTMLInputElement,Props<HTMLInputElement>>(
             placeholder={placeholder}/>
     
         <label htmlFor={id} className="labels">{label?label:""}</label>
-        
-    </InputField>
-});
-
-export const RadioInput = React.forwardRef<HTMLInputElement,Radio>(({name,label,options,id,onChange}:Radio,ref) => {
-    return <InputField>
-        
-        {options.map((option,index)=>(
-        <RadioField key={`${name}-${index}`}>
-            <input
-                className="exemplo2"
-                type="radio"
-                ref={ref}
-                id={`${option}-${index}`}
-                data-radio-name={name}
-                name={name}
-                value={option.toLowerCase()}
-                onChange={(event)=>onChange?onChange(event):null}
-            />
-            <label
-                className="exemplo2"
-                htmlFor={`${option}-${index}`}>
-                    {option.toUpperCase()}
-            </label>
-        </RadioField>))}
-        <label className="labels">{label}</label>
         
     </InputField>
 });

@@ -1,33 +1,10 @@
-import React, {ChangeEvent, useEffect, useRef, useState } from 'react';
-import {FiTrash2} from "react-icons/fi";
-import {useRouteMatch,useHistory} from 'react-router-dom';
-import {uuid} from 'uuidv4';
+import React, {useRef} from 'react';
 
 import{MainFormPanel} from './styles';
-import InputTags from '../../components/InputTags';
-import {DynamicForm,publish} from "../../components/DynamicForm"
-import {Input,Text,RadioInput} from '../../components/FormFields'
-import api from './../../services/api'
-
-interface Players{
-    player_id:number;
-    player_name: string;
-    firstname: string;
-    lastname: string;
-    position:string;
-    age:number;
-    nationality:string;
-}
-
-interface Response{
-    api:{
-       players: Players[];
-    }
-}
-
-interface RouteParams{
-    id:string;
-}
+import InputTags from '../../components/TagsInput';
+import {DynamicForm,publish} from "../../components/DynamicForm";
+import {Input,Text} from '../../components/TextInput';
+import {RadioInput} from '../../components/RadiosInput';
 
 const FormTeam:React.FC = () =>{
 
