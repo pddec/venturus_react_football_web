@@ -5,6 +5,7 @@ import InputTags from '../../components/TagsInput';
 import {DynamicForm,publish} from "../../components/DynamicForm";
 import {Input,Text} from '../../components/TextInput';
 import {RadioInput} from '../../components/RadiosInput';
+import {DropDownInput} from '../../components/DropBoxInput';
 
 const FormTeam:React.FC = () =>{
 
@@ -16,17 +17,58 @@ const FormTeam:React.FC = () =>{
         </section>
         <hr className="solid"/>
         <DynamicForm ref={form_ref} name="team" >
-            <div className="vertical_container">
-                <div className="horizontal_container space wrap">
-                    <div className="vertical_container max_container space">
-                        <Input name="team_name" label="Team Name" onChange={({currentTarget})=>{publish("team_name",currentTarget.value)}}/>
-                        <Text  name="team_description" label="Description" onChange={(elem)=>{}}/>
+            <div id="field1" className="col_container_allwidth">
+                <div className="row_container">
+                    <div className="col_container">
+                        <Input name="team_name" 
+                            label="Team Name" 
+                            onChange={(event:string) =>{publish("team_name",event)}}/>
+                        <Text name="team_description" 
+                            label="Description" 
+                            onChange={(elem)=>{}}/>
                     </div>
-                    <div className="vertical_container max_container space">
-                        <Input name="team_site" placeholder="https://myteam.com" label="Team Name" onChange={()=>{}}/>
-                        <RadioInput name="team_type" label="Team Type" options={["real","fantasy"]}/>
+                    <div className="col_container">
+                        <Input 
+                            name="team_site" 
+                            placeholder="https://myteam.com" 
+                            label="Team WebSite" 
+                        />
+                        <section data-comp="team_type">
+                            <RadioInput 
+                                name="team_type" 
+                                label="Team Type" 
+                                onChange={values => publish("team_type",values)}
+                                options={["real","fantasy"]}
+                            />
+                        </section>
                         <section data-comp="team_tags">
-                            <InputTags id="tags_team" label="Tags" onChange={values => console.log(values)}/>
+                            <InputTags 
+                                id="tags_team" 
+                                label="Tags" 
+                                onChange={values => publish("team_tags",values)}
+                            />
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div id="field2" className="col_container_allwidth">
+                <div className="row_container">
+                    <div className="col_container space">
+                        <section data-comp="team_tags">
+                            <DropDownInput
+                                label="Select Formation"
+                                options={['3 - 2 - 2 - 3',
+                                        '3 - 2 - 3 - 1',
+                                        '3 - 4 - 3',
+                                        '3 - 5 - 2',
+                                        '4 - 2 - 3 - 1',
+                                        '4 - 3 - 1 - 1',
+                                        '4 - 3 - 2',
+                                        '4 - 4 - 2',
+                                        '4 - 5 - 1',
+                                        '5 - 4 -1']}
+                                defaultValue="0-0-0-0"
+                            />
                         </section>
                     </div>
                 </div>

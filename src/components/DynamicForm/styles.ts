@@ -1,28 +1,25 @@
 import styled from 'styled-components';
 
 export const FormBody=styled.section`
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    flex:1;
-
-    form{
         width:100%;
+        margin:20px;
+    form{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
 
-        .vertical_container{
+        .col_container_allwidth{
             display:flex;
             flex-direction:column;
-            
+            width:100%;
+            margin:auto;
         }
 
-        .max_container{
-            
-            
-
-        }
-
-        @media only screen and (max-width: 800px) {
-            width:421px;
+        .col_container{
+            display:flex;
+            flex-direction:column;
+            margin:auto;
+            width:40%;
         }
 
         .wrap{
@@ -30,12 +27,13 @@ export const FormBody=styled.section`
         }
 
         .space{
-            justify-content: space-around;
+            justify-content:space-between;
+            
         }
 
-        .horizontal_container{
+        .row_container{
             display:flex;
-            flex:1;
+            width:100%;
         }
         
     }

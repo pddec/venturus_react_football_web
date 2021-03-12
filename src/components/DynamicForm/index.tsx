@@ -61,6 +61,6 @@ export const DynamicForm =  React.forwardRef<HTMLFormElement,Props>(({children,n
                 <form ref={ref} >
                     {children}
                 </form>
-            </FormBody>)
+          </FormBody>)
 
 });

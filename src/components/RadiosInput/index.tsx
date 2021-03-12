@@ -11,15 +11,14 @@ interface Radio{
     onChange?(event:string):void
 }
 
-
-export const RadioInput:React.FC<Radio> =(({value="",name="",label="",options=[],id="",onChange}:Radio) => {
+export const RadioInput:React.FC<Radio> =(({value="",name="",label="",options=[],id="",onChange=(event:string)=>{}}:Radio) => {
 
     const [selectValue, setSelectValue] = useState<string>(value);
     
     const selectedClass = function selectedClass(option:string) {
-        console.log(selectValue === option);
-        if(selectValue === option) return "selected";
-        return "unselect";
+        if(selectValue !== option) return "unselect";
+        onChange(option);
+        return "selected";
     }
 
     return <Container>

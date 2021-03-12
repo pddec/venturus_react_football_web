@@ -2,23 +2,24 @@ import React from 'react';
 
 import{InputField} from './styles';
 
-interface Props<T> extends React.HTMLProps<T>{
-    onChange?(event:React.ChangeEvent<T>):void
+interface Props{
+    onChange?(event:string):void;
+    name?:string;
+    value?:string;
+    id?:string;
+    label?:string;
+    placeholder?:string;
 }
 
-interface Radio extends Props<HTMLInputElement>{
-    options:Array<string>;
-}
-
-export const Text = React.forwardRef<HTMLTextAreaElement,Props<HTMLTextAreaElement>>(({name,value,id,label,onChange}:Props<HTMLTextAreaElement>,ref) => {
+export const Text = React.forwardRef<HTMLTextAreaElement,Props>(({name="",value="",id="",label="",onChange=(event:string)=>{}}:Props,ref) => {
     return <InputField>
         <textarea
-            data-input-name={name}
+            name={name}
             ref={ref}
             className="input_area  text_box"
             id={id}
             value={value}
-            onChange={(event)=>onChange?onChange(event):null}/>
+            onChange={(event)=>onChange(event.target.value)}/>
 
         <label htmlFor="input_area" 
                 className={id}>
@@ -27,14 +28,14 @@ export const Text = React.forwardRef<HTMLTextAreaElement,Props<HTMLTextAreaEleme
     </InputField>
 });
 
-export const Input = React.forwardRef<HTMLInputElement,Props<HTMLInputElement>>(({name,placeholder,id,label,value,onChange}:Props<HTMLInputElement>,ref) => {
+export const Input = React.forwardRef<HTMLInputElement,Props>(({name="",placeholder="",id="",label="",value="",onChange=(event:string)=>{}}:Props,ref) => {
     return <InputField>
         <input
             data-input-name={name}
             className="input_area"
             id={id}
             ref={ref}
-            onChange={(event)=>onChange?onChange(event):null}
+            onChange={(event)=>onChange(event.target.value)}
             placeholder={placeholder}/>
     
         <label htmlFor={id} className="labels">{label?label:""}</label>
