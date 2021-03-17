@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState} from 'react';
 
 import{RadioField,Container} from './styles';
 
@@ -25,11 +25,9 @@ export const RadioInput:React.FC<Radio> =(({value="",name="",label="",options=[]
        
         <label className="labels">{label}</label>
         {options.map((option,index)=>(
-        <RadioField key={`${name}-${index}`}>
-            <div 
-                className="outter_circle"
-                onClick={()=>setSelectValue(option)}
-            >
+        <RadioField key={`${name}-${index}`}  
+            onClick={()=>setSelectValue(option)}>
+            <div className="outter_circle">
                 <span className={`inner_circle ${selectedClass(option)}`}/>
             </div>
             <label className="label_circle">

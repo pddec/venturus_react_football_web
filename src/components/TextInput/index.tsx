@@ -18,9 +18,7 @@ export const Text = React.forwardRef<HTMLTextAreaElement,Props>(({name="",value=
             ref={ref}
             className="input_area  text_box"
             id={id}
-            value={value}
             onChange={(event)=>onChange(event.target.value)}/>
-
         <label htmlFor="input_area" 
                 className={id}>
             {label?label:""}
@@ -31,7 +29,7 @@ export const Text = React.forwardRef<HTMLTextAreaElement,Props>(({name="",value=
 export const Input = React.forwardRef<HTMLInputElement,Props>(({name="",placeholder="",id="",label="",value="",onChange=(event:string)=>{}}:Props,ref) => {
     return <InputField>
         <input
-            data-input-name={name}
+            name={name}
             className="input_area"
             id={id}
             ref={ref}

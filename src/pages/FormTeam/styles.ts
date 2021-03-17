@@ -2,15 +2,13 @@ import styled from 'styled-components';
 
 export const MainFormPanel = styled.div`
     max-width:95%;
-    height:1080px;
-    margin-right:45px;
+    height:100%;
     display:flex;
     flex-direction: column;
     background-color: #fff;
     display:flex;
     flex-direction:column;
-    margin:0 auto;
-    margin-top:40px;
+    margin:auto;
     border:0;
     border-radius: 5px 5px;
 

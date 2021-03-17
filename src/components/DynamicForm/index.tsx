@@ -1,14 +1,12 @@
-import React, { Children } from 'react';
-import { stringify } from 'uuid';
-
+import React from 'react';
 import{FormBody} from './styles';
 
 interface Subscriber{
   callback:Array<Function>;
-  value?:Array<string>|number|string|boolean;
 }
+
 interface ValuesForm{
-  value:Array<string>|number|string|boolean;
+  [key:string]:Array<string>|number|string|boolean;
 }
 
 interface Props extends React.HTMLProps<HTMLFormElement>{
@@ -21,12 +19,12 @@ interface ValuesInputs{
 }
 
 var subscribers:ValuesInputs={};
+var valuesSubmit:ValuesForm = {};
 
-export const publish = function publish(event:string, data:string|Array<string>|number) {
+ const publish = function publish(event:string, data:string|Array<string>|number) {
       if (!subscribers[event]) return;
       var subscriber = subscribers[event];
-      subscriber.callback.forEach(callback=> callback.call(subscriber,data));
-      console.log(subscribers);
+      subscriber.callback.forEach(func=> func(data));
 };
 
 
@@ -47,19 +45,39 @@ function subscribe(event:string|null, callback:Function) {
 
 export const DynamicForm =  React.forwardRef<HTMLFormElement,Props>(({children,name,onSubmit}:Props,ref) => {
 
-  const {current} = ref as React.MutableRefObject<HTMLFormElement>
+  function find_Components():React.ReactNode{
+    function recursive (inner:React.ReactNode):React.ReactNode{
+      return React.Children.map(inner,elem=>{
+        if(!React.isValidElement(elem)) return;
+        if(["div","span","section"].includes(elem.type.toString())){
+          return React.cloneElement(elem,{},recursive(elem.props.children));
+        }
+        
+        const onChange = function onChange_form(data:string|Array<string>){
+          publish(elem.props.name,data);
+        }
 
-  function eachElements(data_atribute_name:string) {
-    if(!current) return ()=>{console.warn("Any calls")}
-    return function getElements(callBack:Function){
-      current.querySelectorAll(`*[data-${data_atribute_name}]^="${name}"`)
-      .forEach(elem=>callBack(elem));
+        subscribe(elem.props.name,function(data:string|Array<string>){
+          valuesSubmit[elem.props.name] = data;
+        });
+        
+        return React.cloneElement(elem,{onChange},null);
+
+      })
+      
     }
+
+    return React.Children.map(children,elem=>{
+      if(!React.isValidElement(elem)) return;
+        return React.cloneElement(elem,{},recursive(elem));
+    })
   }
+
+  
 
   return (<FormBody>
                 <form ref={ref} >
-                    {children}
+                    {find_Components()}
                 </form>
           </FormBody>)
 

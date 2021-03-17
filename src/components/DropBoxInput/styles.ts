@@ -51,14 +51,15 @@ export const Container = styled.div<Props>`
 
     &:focus{
       border: 2px solid #e80936;
-    }
 
-    &:focus:before{
-      color: #e80936;
-    }
-    
-    &:focus:after{
-      transform:rotateX(180deg);
+      &:before{
+        color: #e80936;
+      }
+
+      &:after{
+        transform:rotateX(180deg);
+      }
+
     }
   }
   .selected_item{
@@ -71,36 +72,67 @@ export const Container = styled.div<Props>`
 export const DropDown = styled.section`
 
   position:absolute;
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
   top:40px;
   background-color:#FFF;
   border-radius: 5px 5px;
   width:100%;
+  height:150px;
+  overflow:hidden;
+  overflow-y:scroll;
   border: 1px solid #737373;
   box-shadow: 0 0 3px black;
   opacity:0;
   transform:translateY(-20px);
-  pointer-events:none;
+
+
+
+  scrollbar-width: thin; 
+  scrollbar-color: transparent transparent;
+
+  &::-webkit-scrollbar {
+      width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  &:hover{
+    scrollbar-color: #e80936 transparent;
+    &::-webkit-scrollbar-thumb {
+      background-color: #e80936;
+      border-radius: 15px;
+    }
+  }
   
-  span{
+  pointer-events:none;
+  z-index:1;
+  
+  .list_positions{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    li{
     width:100%;
     padding:5px;
     cursor:pointer;
+    list-style:none;
   }
 
   .clicked{
     color:#1976d2;;
   }
 
-  span.clicked:hover{
+  li.clicked:hover{
     background-color: #bed1ed;
   }
 
-  span:hover{
+  li:hover{
     background-color: #aeb2b8;
   }
+  }
+  
    
 `

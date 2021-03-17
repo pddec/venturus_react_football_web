@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { stringify } from 'uuid';
 
 import {InputTag,ContainerTag,InputLI} from './styles'
 
